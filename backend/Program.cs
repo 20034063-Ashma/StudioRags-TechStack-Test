@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using StudioRags.API.Data;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<StudioRagsDbContext>(options =>
@@ -7,11 +8,28 @@ builder.Services.AddDbContext<StudioRagsDbContext>(options =>
     )
 );
 
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+    .AddEntityFrameworkStores<StudioRagsDbContext>();
+
+
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactFrontend", policy =>
+    {
+        policy.WithOrigins(
+                "http://localhost:5173",
+                "http://localhost:3000")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 
 var app = builder.Build();
 
@@ -23,8 +41,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("ReactFrontend");
+
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapIdentityApi<IdentityUser>();
 
 app.Run();

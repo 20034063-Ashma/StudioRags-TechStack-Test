@@ -4,3 +4,32 @@ GET {{StudioRags.API_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+### Register a new Studio Rags customer
+POST https://localhost:7247/register
+Content-Type: application/json
+
+{
+  "email": "testcustomer@example.com",
+  "password": "StudioRags@12345"
+}
+
+
+### Login to Studio Rags
+POST https://localhost:7247/login?useCookies=false
+Content-Type: application/json
+
+{
+  "email": "testcustomer@example.com",
+  "password": "StudioRags@12345"
+}
+
+### Test customer login
+POST https://localhost:7247/login?useCookies=false
+Content-Type: application/json
+
+{
+  "email": "testcustomer@example.com",
+  "password": "StudioRags@12345"
+}
+
