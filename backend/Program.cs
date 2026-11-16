@@ -11,20 +11,16 @@ builder.Services.AddDbContext<StudioRagsDbContext>(options =>
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+builder.Services.AddCors(options =>           
 {
-    app.MapOpenApi();
-}
+    options.AddPolicy("ReactApp", policy =>
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod());
+});
 
-app.UseHttpsRedirection();
+var app = builder.Build();                    
+app.UseCors("ReactApp");                      
+app.MapControllers();     
 
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+app.Run();                                   
