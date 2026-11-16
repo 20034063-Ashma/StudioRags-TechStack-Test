@@ -15,17 +15,6 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>()
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("StudioRagsFrontend", policy =>
-    {
-        policy.WithOrigins(
-                "http://localhost:5173",
-                "http://localhost:5174")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
-});
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -34,8 +23,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy("ReactFrontend", policy =>
     {
         policy.WithOrigins(
-                "http://localhost:5173",
-                "http://localhost:3000")
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:3000")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -50,12 +40,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
-
-app.UseCors("StudioRagsFrontend");
+app.UseHttpsRedirection();
 
 app.UseCors("ReactFrontend");
 
