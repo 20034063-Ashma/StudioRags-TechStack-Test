@@ -48,5 +48,13 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapIdentityApi<IdentityUser>();
+app.MapGet("/api/protected", () =>
+{
+    return Results.Ok(new
+    {
+        message = "Authentication successful! You can access this protected API."
+    });
+})
+.RequireAuthorization();
 
 app.Run();
